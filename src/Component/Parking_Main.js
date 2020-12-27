@@ -8,6 +8,7 @@ function Parking_Main() {
     const [parkingData, setparkingData] = useState([]);
     const [updateFlag, setupdateFlag] = useState(false);
     const [filter, setfilter] = useState('');
+    const [pListVisible, setpListVisible] = useState(false);
 
 
     useEffect(() => {
@@ -29,6 +30,7 @@ function Parking_Main() {
             }
             console.log("parking data >>> ", parkingData);
             setupdateFlag(true);
+            setpListVisible(true);
         } else {
             alert('No parking slots are available');
         }
@@ -142,54 +144,66 @@ function Parking_Main() {
             </Navbar>
             <br />
 
-            <form onSubmit={allocateParking}>
-                <div>
-                    Enter parking space: <input type='number' placeholder='enter no. of parking spaces' value={parking_space} onChange={e => setparking_space(parseInt(e.target.value))} />
-                </div>
-                <div>
-                    Enter parking slots: <input type='number' placeholder='enter parking slots' value={parking_slot} onChange={e => setparking_slot(parseInt(e.target.value))} />
-                </div>
-                <button type='submit'>Submit</button>
-            </form>
-            <button onClick={e => AddNewParkingSlot(e)}>Add parking slot</button>
+            {pListVisible ? null :
+                <form className={styles.authinner} onSubmit={allocateParking}>
+                    <h3>Parking Lot</h3>
 
-            <div><input value={filter} onChange={e => setfilter(e.target.value)} /></div>
+                    <div className="form-group">
+                        <label>Parking Space</label>
+                        <input type="number" className="form-control" min="1" placeholder="Enter parking spaces"
+                            value={parking_space} onChange={e => setparking_space(parseInt(e.target.value))} />
+                    </div>
 
-            <div className={styles.tableparking}>
-                <div className={styles.header}>
-                    <h2 className={styles.header_width}>Parking List</h2>
-                    <Button className={styles.btn_width} variant="success">Add Parking</Button>
-                </div>
-                <table>
-                    <thead>
-                        {
-                            filteredData.length > 0 ? (
-                                <tr>
-                                    <th style={{ fontWeight: 'bold' }}>Registration Number</th>
-                                    <th style={{ fontWeight: 'bold' }}>Colour</th>
-                                    <th style={{ fontWeight: 'bold' }}>Slot No</th>
-                                    <th style={{ fontWeight: 'bold' }}>Exit from parking</th>
-                                </tr>
-                            ) : (null)
-                        }
-                    </thead>
-                    <tbody>
-                        {
-                            filteredData.map(pd => {
-                                if (pd.regNo.length > 0 && pd.color.length > 0) {
-                                    return (<tr>
-                                        <td>{pd.regNo}</td>
-                                        <td>{pd.color}</td>
-                                        <td>{pd.slotNo}</td>
-                                        <td><button onClick={e => RemoveParkingSlot(e, pd.slotNo)}>Exit</button></td>
-                                    </tr>)
+                    <div className="form-group">
+                        <label>Parking slots</label>
+                        <input type="number" className="form-control" placeholder="Enter parking slots"
+                            value={parking_slot} onChange={e => setparking_slot(parseInt(e.target.value))} />
+                    </div>
+
+                    <button type="submit" className="btn btn-primary btn-block">Submit</button>
+                </form>
+            }
+
+            {pListVisible ?
+                <div>
+                    Search  <input value={filter} onChange={e => setfilter(e.target.value)} />
+                    <div className={styles.tableparking}>
+                        <div className={styles.header}>
+                            <h4 className={styles.parkingSpace_Size}>Total Parking Spaces : {parking_space}</h4>
+                            <h2 className={styles.header_width}>Parking List</h2>
+                            <Button className={styles.btn_width} variant="success" onClick={e => AddNewParkingSlot(e)}>Add Parking</Button>
+                        </div>
+                        <table>
+                            <thead>
+                                {
+                                    filteredData.length > 0 ? (
+                                        <tr>
+                                            <th style={{ fontWeight: 'bold' }}>Registration Number</th>
+                                            <th style={{ fontWeight: 'bold' }}>Colour</th>
+                                            <th style={{ fontWeight: 'bold' }}>Slot No</th>
+                                            <th style={{ fontWeight: 'bold' }}>Exit from parking</th>
+                                        </tr>
+                                    ) : (null)
                                 }
+                            </thead>
+                            <tbody>
+                                {
+                                    filteredData.map(pd => {
+                                        if (pd.regNo.length > 0 && pd.color.length > 0) {
+                                            return (<tr>
+                                                <td>{pd.regNo}</td>
+                                                <td>{pd.color}</td>
+                                                <td>{pd.slotNo}</td>
+                                                <td><button onClick={e => RemoveParkingSlot(e, pd.slotNo)}>Exit</button></td>
+                                            </tr>)
+                                        }
 
-                            })
-                        }
-                    </tbody>
-                </table>
-            </div>
+                                    })
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div> : null}
         </div>
     )
 }
