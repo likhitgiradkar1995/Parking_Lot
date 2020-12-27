@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavItem, Button, Navbar } from 'react-bootstrap';
 import styles from '../Css/styles.module.css';
-import parkingList from './parkingList';
 
 function Parking_Main() {
     const [parking_space, setparking_space] = useState(0);
@@ -9,7 +8,7 @@ function Parking_Main() {
     const [parkingData, setparkingData] = useState([]);
     const [updateFlag, setupdateFlag] = useState(false);
     const [filter, setfilter] = useState('');
-    
+
 
     useEffect(() => {
         console.log("useeffect called");
@@ -155,10 +154,7 @@ function Parking_Main() {
             <button onClick={e => AddNewParkingSlot(e)}>Add parking slot</button>
 
             <div><input value={filter} onChange={e => setfilter(e.target.value)} /></div>
-           
-           {/* <div>
-               <parkingList filterData={filteredData}/>
-           </div> */}
+
             <div className={styles.tableparking}>
                 <div className={styles.header}>
                     <h2 className={styles.header_width}>Parking List</h2>
