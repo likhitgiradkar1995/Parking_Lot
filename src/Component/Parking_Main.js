@@ -194,7 +194,7 @@ function Parking_Main() {
 
             {pListVisible ?
                 <div>
-                    Search  <input value={filter} onChange={e => setfilter(e.target.value)} />
+                    Search  <input value={filter} onChange={(e) => setfilter(e.target.value)} />
                     <Alert show={show} variant="success" className={styles.alert_width}>
                         <Alert.Heading>Success!</Alert.Heading>
                         <p> New Parking Added successfully!</p>
