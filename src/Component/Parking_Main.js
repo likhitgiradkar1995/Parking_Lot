@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { NavItem, Button, Navbar, Toast, Alert } from 'react-bootstrap';
 import styles from '../Css/styles.module.css';
 
-function Parking_Main() {
-    const [parking_space, setparking_space] = useState(0);
+function Parking_Main(props) {
+    let [parking_space, setparking_space] = useState(0);
     let [parking_slot, setparking_slot] = useState(0);
     const [parkingData, setparkingData] = useState([]);
     const [updateFlag, setupdateFlag] = useState(false);
@@ -13,15 +13,24 @@ function Parking_Main() {
     const [show, setshow] = useState(false);
     const [noSlotAlert, setnoSlotAlert] = useState(false);
     const [exitSlotAlert, setexitSlotAlert] = useState(false);
-
+     const [firstTimeCalled, setfirstTimeCalled] = useState(true)
 
     useEffect(() => {
         console.log("useeffect called");
         setupdateFlag(false);
+        if (firstTimeCalled) {
+            console.log("In update")
+            setparking_space(props.location.parkingSpace);
+            setparking_slot(props.location.parkingSlot);
+            setfirstTimeCalled(false);
+            allocateParking(props.location.parkingSpace, props.location.parkingSlot);
+        }
     }, [updateFlag])
 
-    const allocateParking = (e) => {
-        e.preventDefault();
+    const allocateParking = (parking_space, parking_slot) => {
+        //e.preventDefault();
+        console.log("parking space", parking_space);
+        console.log("parking slot", parking_slot);
         if (parking_slot <= parking_space) {
             for (let i = 1; i <= parking_slot; i++) {
                 let slotObj = {
