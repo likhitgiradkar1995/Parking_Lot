@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
-import { NavItem, Button, Navbar } from 'react-bootstrap';
+import { NavItem, Button, Navbar, Toast, Alert } from 'react-bootstrap';
 import styles from '../Css/styles.module.css';
 
 function Parking_Main() {
@@ -9,6 +10,9 @@ function Parking_Main() {
     const [updateFlag, setupdateFlag] = useState(false);
     const [filter, setfilter] = useState('');
     const [pListVisible, setpListVisible] = useState(false);
+    const [show, setshow] = useState(false);
+    const [noSlotAlert, setnoSlotAlert] = useState(false);
+    const [exitSlotAlert, setexitSlotAlert] = useState(false);
 
 
     useEffect(() => {
@@ -32,9 +36,8 @@ function Parking_Main() {
             setupdateFlag(true);
             setpListVisible(true);
         } else {
-            alert('No parking slots are available');
+            setnoSlotAlert(true);
         }
-
     }
     const generateRandomRegNumber = () => {
         let regNumber = 'MH-' + generateRandom(true, false, false) + '-' + generateRandomAlphaCode() + '-' + generateRandom(false, true, false);
@@ -92,6 +95,7 @@ function Parking_Main() {
             }
         }
         setupdateFlag(true);
+        setexitSlotAlert(true);
     }
 
     const AddNewParkingSlot = (e) => {
@@ -105,6 +109,8 @@ function Parking_Main() {
                     found = true;
                     break;
                 }
+                setshow(true);
+                setnoSlotAlert(false);
             }
             if (!found) {
                 let x = parking_slot;
@@ -117,13 +123,17 @@ function Parking_Main() {
                 if (x <= parking_space) {
                     setparking_slot(x);
                     parkingData.push(slotObj);
+                    setshow(true);
+                    setnoSlotAlert(false);
                 } else {
-                    alert('No parking slots are available');
+                    setshow(false);
+                    setnoSlotAlert(true);
                 }
             }
             setupdateFlag(true);
         } else {
-            alert('No parking slots are available');
+            setshow(false);
+            setnoSlotAlert(true);
         }
     }
 
@@ -143,6 +153,24 @@ function Parking_Main() {
                 </NavItem>
             </Navbar>
             <br />
+
+            <Alert show={noSlotAlert} variant="danger" className={styles.alert_width}>
+                <Alert.Heading>No Slots!</Alert.Heading>
+                <p> No slots available for parking!</p>
+                <hr />
+                <div className="d-flex justify-content-end">
+                    <Button onClick={() => setnoSlotAlert(false)} variant="outline-danger"> Close </Button>
+                </div>
+            </Alert>
+
+            <Alert show={exitSlotAlert} variant="success" className={styles.alert_width}>
+                <Alert.Heading>Exit success!</Alert.Heading>
+                <p>Exit from parking Successfully!</p>
+                <hr />
+                <div className="d-flex justify-content-end">
+                    <Button onClick={() => setexitSlotAlert(false)} variant="outline-success"> Close </Button>
+                </div>
+            </Alert>
 
             {pListVisible ? null :
                 <form className={styles.authinner} onSubmit={allocateParking}>
@@ -167,6 +195,14 @@ function Parking_Main() {
             {pListVisible ?
                 <div>
                     Search  <input value={filter} onChange={e => setfilter(e.target.value)} />
+                    <Alert show={show} variant="success" className={styles.alert_width}>
+                        <Alert.Heading>Success!</Alert.Heading>
+                        <p> New Parking Added successfully!</p>
+                        <hr />
+                        <div className="d-flex justify-content-end">
+                            <Button onClick={() => setshow(false)} variant="outline-success"> Close </Button>
+                        </div>
+                    </Alert>
                     <div className={styles.tableparking}>
                         <div className={styles.header}>
                             <h4 className={styles.parkingSpace_Size}>Total Parking Spaces : {parking_space}</h4>
@@ -194,7 +230,7 @@ function Parking_Main() {
                                                 <td>{pd.regNo}</td>
                                                 <td>{pd.color}</td>
                                                 <td>{pd.slotNo}</td>
-                                                <td><button onClick={e => RemoveParkingSlot(e, pd.slotNo)}>Exit</button></td>
+                                                <td><Button variant="warning" onClick={e => RemoveParkingSlot(e, pd.slotNo)}>Exit</Button></td>
                                             </tr>)
                                         }
 
@@ -204,6 +240,13 @@ function Parking_Main() {
                         </table>
                     </div>
                 </div> : null}
+
+            <Toast onClose={() => setshow(false)} show={show} delay={2000} autohide>
+                <Toast.Header>
+                    <strong className="mr-auto">Success!</strong>
+                </Toast.Header>
+                <Toast.Body>New Parking added successfully!</Toast.Body>
+            </Toast>
         </div>
     )
 }

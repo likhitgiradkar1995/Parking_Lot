@@ -69,7 +69,11 @@
     width: 150px;
     margin-right: 5px;
   }
-
+  .alert_width{
+    width: 350px; 
+    margin-left: 400px;
+    margin-top: 30px;
+  }
   .authinner {
     width: 450px;
     margin-left: 450px;
