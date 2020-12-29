@@ -18,19 +18,17 @@ function Parking_Main(props) {
     useEffect(() => {
         console.log("useeffect called");
         setupdateFlag(false);
-        if (firstTimeCalled) {
-            console.log("In update")
-            setparking_space(props.location.parkingSpace);
-            setparking_slot(props.location.parkingSlot);
-            setfirstTimeCalled(false);
-            allocateParking(props.location.parkingSpace, props.location.parkingSlot);
-        }
+        // if (firstTimeCalled) {
+        //     console.log("In update")
+        //     setparking_space(props.location.parkingSpace);
+        //     setparking_slot(props.location.parkingSlot);
+        //     setfirstTimeCalled(false);
+        //     allocateParking(props.location.parkingSpace, props.location.parkingSlot);
+        // }
     }, [updateFlag])
 
-    const allocateParking = (parking_space, parking_slot) => {
-        //e.preventDefault();
-        console.log("parking space", parking_space);
-        console.log("parking slot", parking_slot);
+    const allocateParking = (e) => {
+        e.preventDefault();
         if (parking_slot <= parking_space) {
             for (let i = 1; i <= parking_slot; i++) {
                 let slotObj = {
@@ -48,6 +46,27 @@ function Parking_Main(props) {
             setnoSlotAlert(true);
         }
     }
+    // const allocateParking = (parking_space, parking_slot) => {
+    //     //e.preventDefault();
+    //     console.log("parking space", parking_space);
+    //     console.log("parking slot", parking_slot);
+    //     if (parking_slot <= parking_space) {
+    //         for (let i = 1; i <= parking_slot; i++) {
+    //             let slotObj = {
+    //                 regNo: generateRandomRegNumber(),
+    //                 color: generateRandom(false, false, true),
+    //                 slotNo: i
+    //             }
+    //             console.log("slot obj", slotObj);
+    //             parkingData.push(slotObj);
+    //         }
+    //         console.log("parking data >>> ", parkingData);
+    //         setupdateFlag(true);
+    //         setpListVisible(true);
+    //     } else {
+    //         setnoSlotAlert(true);
+    //     }
+    // }
     const generateRandomRegNumber = () => {
         let regNumber = 'MH-' + generateRandom(true, false, false) + '-' + generateRandomAlphaCode() + '-' + generateRandom(false, true, false);
         return regNumber;

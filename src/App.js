@@ -8,15 +8,15 @@ import HomePage from './Component/HomePage';
 function App() {
   return (
     <div className="App">
-      <Router>
+      {/* <Router>
         <div>
           <Switch>
             <Route path='/' exact component={HomePage} />
             <Route path='/Parking_Main' component={Parking_Main}/>
           </Switch>
         </div>
-      </Router>
-      {/* <Parking_Main /> */}
+      </Router> */}
+      <Parking_Main />
     </div>
   );
 }
